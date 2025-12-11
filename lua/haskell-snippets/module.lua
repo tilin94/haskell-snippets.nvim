@@ -174,4 +174,27 @@ if has_haskell_parser then
   })
   table.insert(module.all, module.qualc)
 end
+
+local function get_mdoc_module_name_node()
+  local module_name = util.lsp_get_module_name() or get_buf_module_name()
+  if module_name then
+    return sn(nil, { text(module_name) })
+  end
+  return sn(nil, { insert(1, 'MyModule') })
+end
+
+---@type Snippet Haddock module documentation
+module.mdoc = s({
+  trig = 'mdoc',
+  dscr = 'Haddock module documentation',
+}, {
+  text { '-- |', '-- Module      : ' },
+  dynamic(1, get_mdoc_module_name_node),
+  text { '', '-- Description : ' },
+  insert(2, 'Short description here'),
+  text { '', '--', '-- ' },
+  insert(3, 'Longer description of the module.'),
+})
+table.insert(module.all, module.mdoc)
+
 return module

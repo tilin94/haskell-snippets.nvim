@@ -113,4 +113,48 @@ functions.lambda = s({
 })
 table.insert(functions.all, functions.lambda)
 
+local function get_fdoc_nodes()
+  local context = util.get_function_context()
+
+  if context then
+    local nodes = {
+      text('-- | `' .. context.name .. '` '),
+      insert(1, 'description.'),
+      text { '', '--', '-- Examples:', '--', '-- >>> ' .. context.name },
+    }
+
+    -- Add each parameter as an insert node
+    local idx = 2
+    for _, param in ipairs(context.params) do
+      table.insert(nodes, text(' '))
+      table.insert(nodes, insert(idx, param))
+      idx = idx + 1
+    end
+
+    table.insert(nodes, text { '', '-- ' })
+    table.insert(nodes, insert(idx, context.return_type))
+
+    return sn(nil, nodes)
+  end
+
+  -- Fallback to placeholders
+  return sn(nil, {
+    text('-- | '),
+    insert(1, 'Brief description.'),
+    text { '', '--', '-- Examples:', '--', '-- >>> ' },
+    insert(2, 'example'),
+    text { '', '-- ' },
+    insert(3, 'expected'),
+  })
+end
+
+---@type Snippet Haddock function documentation
+functions.fdoc = s({
+  trig = 'fdoc',
+  dscr = 'Haddock function documentation',
+}, {
+  dynamic(1, get_fdoc_nodes),
+})
+table.insert(functions.all, functions.fdoc)
+
 return functions

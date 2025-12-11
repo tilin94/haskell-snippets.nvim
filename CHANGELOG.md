@@ -6,6 +6,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- `fdoc` snippet: Haddock function documentation with smart signature detection.
+  Automatically detects function name and type signature from the line below cursor,
+  generating example placeholders with parameter types.
+- `mdoc` snippet: Haddock module documentation with smart module name detection.
+  Uses LSP codelens or filename as fallback.
+- `util.parse_type_signature`: Parse Haskell type signatures into parameter types
+  and return type, handling parentheses, brackets, and braces.
+- `util.parse_function_line`: Parse function type declaration lines.
+- `util.get_function_context`: Get function context from the line below cursor.
+- `util.strip_forall`: Strip forall quantifiers from type signatures.
+- `util.strip_constraints`: Strip type class constraints from type signatures.
+- `util.is_signature_continuation`: Detect multiline signature continuation lines.
+- `util.collect_multiline_signature`: Collect multiline type signatures.
+- Multiline type signature support for `fdoc` snippet.
+- Comprehensive tests for signature parsing, forall/constraint handling,
+  multiline signatures, and function context detection (49 tests).
+
+### Fixed
+
+- Handle nil parent position in `_indent_newline` that caused
+  "bad argument #2 to 'rep'" errors in snippets using dynamic indentation.
+
 ## [1.5.0] - 2025-10-06
 
 ### Added
